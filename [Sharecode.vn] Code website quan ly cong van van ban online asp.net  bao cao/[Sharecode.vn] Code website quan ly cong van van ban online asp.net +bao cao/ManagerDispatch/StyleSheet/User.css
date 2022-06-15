@@ -1,0 +1,31 @@
+﻿body {
+}
+ .inform
+   { width:100%;
+   	}
+.title_inform
+{ font-size:14pt;
+  font-family:Times New Roman Sans-Serif;
+  text-align:center;
+  display:block;
+  margin-bottom:5px;
+  color:#39c;
+  font-weight:bold;
+  margin-top:10px;
+  width:301px;
+	}
+.left
+{ 
+  font-family:Times New Roman Arial Sans-Serif;
+  font-size:12pt;
+  color:#39c;
+  text-align:center;
+  line-height:35px;
+  margin-bottom:2px;
+	}
+	.right
+	{
+	  margin-left:3px;
+	  line-height:35px;
+    margin-bottom:2px;
+		}

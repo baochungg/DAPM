@@ -1,0 +1,114 @@
+﻿.tablSearch
+{
+    color:#222;
+    margin:10px 0;
+    width:100%;
+}
+.tablSearch tr td select
+{
+    width:95%;
+    height:20px;
+    line-height:20px;
+}
+
+
+
+.tblTextTo
+{
+	font-family: arial,sans-serif;
+	border-collapse: collapse;
+	border-spacing: 0;
+    cursor: pointer;
+    padding: 0;
+    table-layout: fixed;
+    width: 100%;
+}
+.tblTextTo td
+{
+	font-family: arial,sans-serif;
+    margin: 0;
+}
+.rowTextTo
+{
+	background: none repeat scroll 0 0 rgba(243, 243, 243, 0.85);
+    color: #222222;
+    cursor: pointer;
+}
+.rowNewTextTo
+{
+	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.9);
+    color: #222222;
+    font-weight:bold; 
+}
+td.tdRow
+{
+	border-bottom: 1px solid #E5E5E5;
+    height: 3.61ex;
+    overflow: hidden;
+    padding: 3px 0 1px;
+    vertical-align: middle;
+    white-space: nowrap;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+td.tdRowStaffName
+{
+	padding-left: 10px;
+    padding-right: 6px;
+}
+td.tdTextLevel
+{
+	padding-bottom: 1px;
+    padding-top: 1px;
+}
+td.icon img
+{
+	text-align: center;
+	display: inline-block;
+	margin:0px 7px;
+	width:16px;
+	height:16px;
+	position: relative;
+    top: 0px;
+}
+
+/* button */
+.btTextTo
+     {
+     	background-color: transparent;
+		background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		color: #444444;
+		display: inline-block;
+		position: relative;
+		border-radius: 2px 2px 2px 2px;
+		cursor: default;
+		font-size: 11px;
+		font-weight: bold;
+		height: 27px;
+		line-height: 27px;
+		margin-right: 16px;
+		min-width: 54px;
+		outline: 0 none;
+		padding: 0 8px;
+		text-align: center;
+     }
+.btTextTo:hover
+{
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.btTextTo:focus
+{
+	border: 1px solid #4D90FE;
+}
+.btTextTo_icon
+{
+	opacity: 0.55;
+	margin-top: -3px;
+	vertical-align: middle;
+	height: 21px;
+	width: 21px; 
+	display: inline-block;
+	position: relative;
+}
+/* end button */

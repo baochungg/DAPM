@@ -1,0 +1,393 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Database Name="ManagementDispatch" Class="ManagementDispatchDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQLEXPRESS;Initial Catalog=ManagementDispatch;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ManagementDispatchConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Acount" Member="Acounts">
+    <Type Name="Acount">
+      <Column Name="AcountID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="AcountIsBlocked" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAdminAcount" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Acount_AcountEmailSentID" Member="AcountEmailSentIDs" OtherKey="AcountID" Type="AcountEmailSentID" />
+      <Association Name="Acount_EmailInbox" Member="EmailInboxes" OtherKey="AcountID" Type="EmailInbox" />
+      <Association Name="Acount_Staff" Member="Staffs" OtherKey="AcountID" Type="Staff" />
+      <Association Name="Acount_SystemLog" Member="SystemLogs" OtherKey="AcountID" Type="SystemLog" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WorkingState" Member="WorkingStates">
+    <Type Name="WorkingState">
+      <Column Name="WorkingStateID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WorkingStateName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="WorkingState_CalendarWorking" Member="CalendarWorkings" OtherKey="WorkingStateID" Type="CalendarWorking" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AcountEmailSentID" Member="AcountEmailSentIDs">
+    <Type Name="AcountEmailSentID">
+      <Column Name="EmailSentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="AcountID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Acount_AcountEmailSentID" Member="Acount" ThisKey="AcountID" Type="Acount" IsForeignKey="true" />
+      <Association Name="EmailSent_AcountEmailSentID" Member="EmailSent" ThisKey="EmailSentID" Type="EmailSent" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Book" Member="Books">
+    <Type Name="Book">
+      <Column Name="BookID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="BookName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="BookPrefix" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="BookDescription" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Book_TextInBook" Member="TextInBooks" OtherKey="BookID" Type="TextInBook" />
+      <Association Name="Department_Book" Member="Department" ThisKey="DepartmentID" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CalendarWorking" Member="CalendarWorkings">
+    <Type Name="CalendarWorking">
+      <Column Name="CalendarWorkID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TypeCalendarID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StaffOrDepartmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="WorkID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ChargePerson" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="WorkingStateID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="WorkingState_CalendarWorking" Member="WorkingState" ThisKey="WorkingStateID" Type="WorkingState" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="TypeCalendar_CalendarWorking" Member="TypeCalendar" ThisKey="TypeCalendarID" Type="TypeCalendar" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Work_CalendarWorking" Member="Work" ThisKey="WorkID" Type="Work" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Department" Member="Departments">
+    <Type Name="Department">
+      <Column Name="DepartmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Department_Book" Member="Books" OtherKey="DepartmentID" Type="Book" />
+      <Association Name="Department_DepartmentOfDepartment" Member="DepartmentOfDepartment" OtherKey="DepartmentID" Type="DepartmentOfDepartment" Cardinality="One" />
+      <Association Name="Department_DepartmentOfDepartment1" Member="DepartmentOfDepartments" OtherKey="DepartmentParentID" Type="DepartmentOfDepartment" />
+      <Association Name="Department_Staff" Member="Staffs" OtherKey="DepartmentID" Type="Staff" />
+      <Association Name="Department_TextOut" Member="TextOuts" OtherKey="DepartmentID" Type="TextOut" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DepartmentAddress" Member="DepartmentAddresses">
+    <Type Name="DepartmentAddress">
+      <Column Name="DepartmentAddressID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentAddressName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="DepartmentAddress_Text" Member="Texts" OtherKey="DepartmentAddressID" Type="Text" />
+    </Type>
+  </Table>
+  <Table Name="dbo.DepartmentOfDepartment" Member="DepartmentOfDepartments">
+    <Type Name="DepartmentOfDepartment">
+      <Column Name="DepartmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentParentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Department_DepartmentOfDepartment" Member="Department" ThisKey="DepartmentID" Type="Department" IsForeignKey="true" />
+      <Association Name="Department_DepartmentOfDepartment1" Member="Department1" ThisKey="DepartmentParentID" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Email" Member="Emails">
+    <Type Name="Email">
+      <Column Name="EmailID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmailSubject" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="EmailContent" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Email_EmailAttachment" Member="EmailAttachments" OtherKey="EmailID" Type="EmailAttachment" />
+      <Association Name="Email_EmailInbox" Member="EmailInboxes" OtherKey="EmailID" Type="EmailInbox" />
+      <Association Name="Email_EmailSent" Member="EmailSents" OtherKey="EmailID" Type="EmailSent" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmailAttachment" Member="EmailAttachments">
+    <Type Name="EmailAttachment">
+      <Column Name="EmailAttachmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmailID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="FileAttachmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Email_EmailAttachment" Member="Email" ThisKey="EmailID" Type="Email" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="FileAttachment_EmailAttachment" Member="FileAttachment" ThisKey="FileAttachmentID" Type="FileAttachment" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmailInbox" Member="EmailInboxes">
+    <Type Name="EmailInbox">
+      <Column Name="EmailInboxID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmailID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="DateTo" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="AcountID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Acount_EmailInbox" Member="Acount" ThisKey="AcountID" Type="Acount" IsForeignKey="true" />
+      <Association Name="Email_EmailInbox" Member="Email" ThisKey="EmailID" Type="Email" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.EmailSent" Member="EmailSents">
+    <Type Name="EmailSent">
+      <Column Name="EmailSentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmailID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Date" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="EmailSent_AcountEmailSentID" Member="AcountEmailSentID" OtherKey="EmailSentID" Type="AcountEmailSentID" Cardinality="One" />
+      <Association Name="Email_EmailSent" Member="Email" ThisKey="EmailID" Type="Email" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.FileAttachment" Member="FileAttachments">
+    <Type Name="FileAttachment">
+      <Column Name="FileAttachmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FileName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="FileSize" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Column Name="ContentType" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="FileData" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="FileAttachment_EmailAttachment" Member="EmailAttachments" OtherKey="FileAttachmentID" Type="EmailAttachment" />
+      <Association Name="FileAttachment_TextAttachment" Member="TextAttachments" OtherKey="FileAttachmentID" Type="TextAttachment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.GroupUser" Member="GroupUsers">
+    <Type Name="GroupUser">
+      <Column Name="GroupUserID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GroupUserName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="GroupUser_OwnerGroupUser" Member="OwnerGroupUsers" OtherKey="GroupUserID" Type="OwnerGroupUser" />
+      <Association Name="GroupUser_StaffGroupUser" Member="StaffGroupUsers" OtherKey="GroupUserID" Type="StaffGroupUser" />
+      <Association Name="GroupUser_TextOut" Member="TextOuts" OtherKey="GroupUserID" Type="TextOut" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Menu" Member="Menus">
+    <Type Name="Menu">
+      <Column Name="MainMenuID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ParentMenu" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="MainMenuName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuDescription" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="MenuIndex" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsParentMenu" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="MenuUrl" Type="System.String" DbType="NVarChar(250)" CanBeNull="true" />
+      <Column Name="MenuIcon" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Enable" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OwnerAdmin" Member="OwnerAdmins">
+    <Type Name="OwnerAdmin">
+      <Column Name="OwnerAdminID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="[All]" Member="All" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentReadOnly" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentModify" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentCreate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="GroupUserAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StaffReadOnly" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StaffModify" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StaffDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StaffCreate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SystemLogView" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SystemLogDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerMenu" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="OwnerAdmin_OwnerGroupUser" Member="OwnerGroupUsers" OtherKey="OwnerAdminID" Type="OwnerGroupUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OwnerCalendar" Member="OwnerCalendars">
+    <Type Name="OwnerCalendar">
+      <Column Name="OwnerCalendarID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="[All]" Member="All" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ReadOnly" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ModifyStateWork" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DeleteCalendar" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="CreateCalendar" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="OwnerCalendar_OwnerGroupUser" Member="OwnerGroupUsers" OtherKey="OwnerCalendarID" Type="OwnerGroupUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OwnerGroupUser" Member="OwnerGroupUsers">
+    <Type Name="OwnerGroupUser">
+      <Column Name="OwnerGroupUserID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GroupUserID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerTextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerCalendarID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="OwnerAdminID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="GroupUser_OwnerGroupUser" Member="GroupUser" ThisKey="GroupUserID" Type="GroupUser" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="OwnerAdmin_OwnerGroupUser" Member="OwnerAdmin" ThisKey="OwnerAdminID" Type="OwnerAdmin" IsForeignKey="true" />
+      <Association Name="OwnerCalendar_OwnerGroupUser" Member="OwnerCalendar" ThisKey="OwnerCalendarID" Type="OwnerCalendar" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="OwnerText_OwnerGroupUser" Member="OwnerText" ThisKey="OwnerTextID" Type="OwnerText" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.OwnerText" Member="OwnerTexts">
+    <Type Name="OwnerText">
+      <Column Name="OwnerTextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="[All]" Member="All" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BookReadOnly" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BookModify" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BookDelete" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BookCreate" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="BookManagement" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TypeTextAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TextLevelAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="TextSecurityAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="OtherContactAdmin" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="OwnerText_OwnerGroupUser" Member="OwnerGroupUsers" OtherKey="OwnerTextID" Type="OwnerGroupUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Staff" Member="Staffs">
+    <Type Name="Staff">
+      <Column Name="StaffID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsCharge" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StaffName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Birthday" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(150)" CanBeNull="true" />
+      <Column Name="PhoneNumber" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="AcountID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EmailAddress" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Staff_StaffGroupUser" Member="StaffGroupUser" OtherKey="StaffID" Type="StaffGroupUser" Cardinality="One" />
+      <Association Name="Staff_TextOut" Member="TextOuts" OtherKey="StaffID" Type="TextOut" />
+      <Association Name="Staff_TextTo" Member="TextTos" OtherKey="StaffFromID" Type="TextTo" />
+      <Association Name="Staff_TextTo1" Member="TextTos1" OtherKey="StaffToID" Type="TextTo" />
+      <Association Name="Acount_Staff" Member="Acount" ThisKey="AcountID" Type="Acount" IsForeignKey="true" />
+      <Association Name="Department_Staff" Member="Department" ThisKey="DepartmentID" Type="Department" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StaffGroupUser" Member="StaffGroupUsers">
+    <Type Name="StaffGroupUser">
+      <Column Name="StaffID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GroupUserID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="GroupUser_StaffGroupUser" Member="GroupUser" ThisKey="GroupUserID" Type="GroupUser" IsForeignKey="true" />
+      <Association Name="Staff_StaffGroupUser" Member="Staff" ThisKey="StaffID" Type="Staff" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.StateTextTo" Member="StateTextTos">
+    <Type Name="StateTextTo">
+      <Column Name="StateTextToID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StateTextToName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="IconUrl" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Association Name="StateTextTo_TextTo" Member="TextTos" OtherKey="StateTextToID" Type="TextTo" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SystemLog" Member="SystemLogs">
+    <Type Name="SystemLog">
+      <Column Name="SystemLogID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClientIP" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="AcountID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="DescriptionAction" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="LogDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Acount_SystemLog" Member="Acount" ThisKey="AcountID" Type="Acount" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Text" Member="Texts">
+    <Type Name="Text">
+      <Column Name="TextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TypeTextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsInternalDocuments" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentAddressID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="TextNoCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="DateCreate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Signer" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="TextLevelID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TextSecurityID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="NeedTreated" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Text_TextAttachment" Member="TextAttachments" OtherKey="TextID" Type="TextAttachment" />
+      <Association Name="Text_TextInBook" Member="TextInBook" OtherKey="TextID" Type="TextInBook" Cardinality="One" />
+      <Association Name="Text_TextInbox" Member="TextInboxes" OtherKey="TextID" Type="TextInbox" />
+      <Association Name="DepartmentAddress_Text" Member="DepartmentAddress" ThisKey="DepartmentAddressID" Type="DepartmentAddress" IsForeignKey="true" />
+      <Association Name="TextLevel_Text" Member="TextLevel" ThisKey="TextLevelID" Type="TextLevel" IsForeignKey="true" />
+      <Association Name="TextSecurity_Text" Member="TextSecurity" ThisKey="TextSecurityID" Type="TextSecurity" IsForeignKey="true" />
+      <Association Name="TypeText_Text" Member="TypeText" ThisKey="TypeTextID" Type="TypeText" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextAttachment" Member="TextAttachments">
+    <Type Name="TextAttachment">
+      <Column Name="TextAttachmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FileAttachmentID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="FileAttachment_TextAttachment" Member="FileAttachment" ThisKey="FileAttachmentID" Type="FileAttachment" IsForeignKey="true" />
+      <Association Name="Text_TextAttachment" Member="Text" ThisKey="TextID" Type="Text" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextInBook" Member="TextInBooks">
+    <Type Name="TextInBook">
+      <Column Name="TextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="BookID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Book_TextInBook" Member="Book" ThisKey="BookID" Type="Book" IsForeignKey="true" />
+      <Association Name="Text_TextInBook" Member="Text" ThisKey="TextID" Type="Text" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextInbox" Member="TextInboxes">
+    <Type Name="TextInbox">
+      <Column Name="TextInboxID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TextContent" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="DateTo" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateIssued" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="TreatedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EditedDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="TextInbox_TextOut" Member="TextOuts" OtherKey="TextInboxID" Type="TextOut" />
+      <Association Name="TextInbox_TextTo" Member="TextTos" OtherKey="TextInboxID" Type="TextTo" />
+      <Association Name="Text_TextInbox" Member="Text" ThisKey="TextID" Type="Text" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextLevel" Member="TextLevels">
+    <Type Name="TextLevel">
+      <Column Name="TextLevelID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextLevelName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="TextLevelPoint" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TextLevelDescription" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="IconUrl" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="TextLevel_Text" Member="Texts" OtherKey="TextLevelID" Type="Text" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextOut" Member="TextOuts">
+    <Type Name="TextOut">
+      <Column Name="TextOutID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextInboxID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ToGroupUser" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ToStaff" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ToDepartment" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="GroupUserID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="DepartmentID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Column Name="StaffID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="Department_TextOut" Member="Department" ThisKey="DepartmentID" Type="Department" IsForeignKey="true" />
+      <Association Name="GroupUser_TextOut" Member="GroupUser" ThisKey="GroupUserID" Type="GroupUser" IsForeignKey="true" />
+      <Association Name="Staff_TextOut" Member="Staff" ThisKey="StaffID" Type="Staff" IsForeignKey="true" />
+      <Association Name="TextInbox_TextOut" Member="TextInbox" ThisKey="TextInboxID" Type="TextInbox" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextSecurity" Member="TextSecurities">
+    <Type Name="TextSecurity">
+      <Column Name="TextSecurityID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextSecurityName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="IconUrl" Type="System.String" DbType="NVarChar(300)" CanBeNull="true" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="TextSecurity_Text" Member="Texts" OtherKey="TextSecurityID" Type="Text" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TextTo" Member="TextTos">
+    <Type Name="TextTo">
+      <Column Name="TextToID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TextInboxID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StaffToID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="StaffFromID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsNew" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="StateTextToID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="Staff_TextTo" Member="Staff" ThisKey="StaffFromID" Type="Staff" IsForeignKey="true" />
+      <Association Name="Staff_TextTo1" Member="Staff1" ThisKey="StaffToID" Type="Staff" IsForeignKey="true" />
+      <Association Name="StateTextTo_TextTo" Member="StateTextTo" ThisKey="StateTextToID" Type="StateTextTo" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="TextInbox_TextTo" Member="TextInbox" ThisKey="TextInboxID" Type="TextInbox" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TypeCalendar" Member="TypeCalendars">
+    <Type Name="TypeCalendar">
+      <Column Name="TypeCalendarID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TypeCalendarName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="TypeCalendar_CalendarWorking" Member="CalendarWorkings" OtherKey="TypeCalendarID" Type="CalendarWorking" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TypeText" Member="TypeTexts">
+    <Type Name="TypeText">
+      <Column Name="TypeTextID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TypeTextName" Type="System.String" DbType="NVarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="TypeTextDescription" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Column Name="IsDeleted" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="TypeText_Text" Member="Texts" OtherKey="TypeTextID" Type="Text" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[Work]" Member="Works">
+    <Type Name="Work">
+      <Column Name="WorkID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="WorkName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="WorkDetails" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="DateWorkStart" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DateWorkEnd" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Note" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Work_CalendarWorking" Member="CalendarWorkings" OtherKey="WorkID" Type="CalendarWorking" />
+    </Type>
+  </Table>
+</Database>
